@@ -38,7 +38,17 @@
       "watermelon",
       "peach",
       "plum"
-    ],
-    
+    ]
+  },
+  {
+    "id": 6,
+    "name": "very hard math",
+    "taskDescription": "what is 852 * 963 =",
+    "correctAnswer": "820,476",
+    "choices": [
+      "820,476",
+      "9,300",
+      "630,085"
+    ]
   }
 ]
