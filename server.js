@@ -1,20 +1,20 @@
 import http from "http";
-import { readData, writeData } from "./riddlesDAL.js";
+import { readData, writeData } from "./DAL/riddlesDAL.js";
 import { parse } from "url";
 
 const PORT = 3007;
 
-const PATH = "riddles.txt";
+const PATH = "./lib/riddles.txt";
 
 const server = http.createServer(async (req, res) => {
     const { pathname } = parse(req.url, true);
 
 
     let body = "";
-    req.on("datd",chunk => body += chunk);
+    req.on("data",chunk => body += chunk);
     req.on("end",async () =>{
         try{
-            const datd = body ? JSON.parse(body) : null;
+            const data = body ? JSON.parse(body) : null;
             const riddles = await readData(PATH)
 
 
@@ -28,7 +28,7 @@ const server = http.createServer(async (req, res) => {
             // POST
             else if(req.method === "POST" && pathname === "/riddles/addRiddle"){
                 const maxId = riddles.reduce((max,r)=> Math.max(max,r.id),0);
-                const newRiddle = {...data,id: maxId + 1};
+                const newRiddle = {id: maxId + 1, ...data};
                 riddles.push(newRiddle);
                 await writeData(PATH,riddles);
                 res.writeHead(201,{"Content-Type":"application/json"});
@@ -70,7 +70,7 @@ const server = http.createServer(async (req, res) => {
             }
             else{
                 res.writeHead(404);
-                res.end(JSON.stringify({error:"rout not found"}))
+                res.end(JSON.stringify({error:"route not found"}))
             }
         }catch{
             res.writeHead(400);

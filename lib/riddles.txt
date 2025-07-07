@@ -28,5 +28,17 @@
       "lion",
       "bird"
     ]
+  },
+  {
+    "id": 5,
+    "name": "fruit",
+    "taskDescription": "What fruit is green outside and red inside?",
+    "correctAnswer": "watermelon",
+    "choices": [
+      "watermelon",
+      "peach",
+      "plum"
+    ],
+    
   }
 ]
