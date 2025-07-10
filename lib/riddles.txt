@@ -39,5 +39,11 @@
       "peach",
       "plum"
     ]
+  },
+  {
+    "id": 6,
+    "name": "chicken",
+    "taskDescription": "why the chicken cross the road?",
+    "correctAnswer": "becuase he stupid"
   }
 ]
