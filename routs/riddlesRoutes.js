@@ -6,9 +6,10 @@ const router = express.Router();
 
 
 router.get('/',riddlesController.getAllRiddles);
-router.post('/addRiddle',riddlesController.addRiddle);
-router.put('/updateRiddle',riddlesController.updateRiddle);
-router.delete('/deleteRiddle',riddlesController.deleteRiddle);
+router.get('/:id',riddlesController.getRiddleById)
+router.post('/',riddlesController.addRiddle);
+router.put('/:id',riddlesController.updateRiddle);
+router.delete('/:id',riddlesController.deleteRiddle);
 
 
 export default router;
