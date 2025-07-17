@@ -2,9 +2,6 @@ import { readPlayers, writePlayers } from "../DAL/playersDAL.js";
 
 
 
-
-
-
 // Get all players
 export async function getAllPlayers(req, res) {
   try {
