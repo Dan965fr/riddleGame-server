@@ -12,5 +12,4 @@ export async function readPlayers() {
 export async function writePlayers(data){
     const str = JSON.stringify(data,null,2)
     await fs.writeFile(PATH,str,"utf-8")
-
 }
