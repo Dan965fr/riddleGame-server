@@ -1,15 +1,15 @@
 import express from 'express';
-import * as riddlesController from '../Controllers/riddlesController.js'
+import {getAllRiddles,getRiddleById,addRiddle,updateRiddle,deleteRiddle} from '../Controllers/riddlesController.js'
 
 
 const router = express.Router();
 
 
-router.get('/',riddlesController.getAllRiddles);
-router.get('/:id',riddlesController.getRiddleById)
-router.post('/',riddlesController.addRiddle);
-router.put('/:id',riddlesController.updateRiddle);
-router.delete('/:id',riddlesController.deleteRiddle);
+router.get('/',getAllRiddles);
+router.get('/:id',getRiddleById);
+router.post('/',addRiddle);
+router.put('/:id',updateRiddle);
+router.delete('/:id',deleteRiddle);
 
 
 export default router;
