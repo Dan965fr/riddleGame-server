@@ -39,5 +39,17 @@
       "peach",
       "plum"
     ]
+  },
+  {
+    "id": 6,
+    "name": "Logic Puzzle",
+    "taskDescription": "What comes next in the sequence: 2, 4, 8, 16, ?",
+    "correctAnswer": "32",
+    "choices": [
+      "24",
+      "32",
+      "34",
+      "36"
+    ]
   }
 ]
