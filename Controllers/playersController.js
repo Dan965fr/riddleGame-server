@@ -1,77 +1,90 @@
-import { readPlayers, writePlayers } from "../DAL/playersDAL.js";
+import {
+  getAllPlayers,
+  getPlayerById,
+  addPlayer,
+  updatePlayerTime,
+  deletePlayer,
+} from '../DAL/playersDAL.js';
 
 
 
 
-
-
-// Get all players
-export async function getAllPlayers(req, res) {
+// קבל את כל השחקנים
+export async function getAllPlayersController(req, res) {
   try {
-    const players = await readPlayers();
+    const players = await getAllPlayers();
     res.json(players);
-  } catch {
-    res.status(500).json({ error: "Failed to read players" });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to get players' });
   }
 }
 
 
 
-// Get player by name
-export async function getPlayerByName(req, res) {
+
+// קבל שחקן לפי ID
+export async function getPlayerByIdController(req, res) {
   try {
-    const { name } = req.params;
-    const players = await readPlayers();
-    const player = players.find(p => p.name.toLowerCase() === name.toLowerCase());
-
-    if (!player) {
-      return res.status(404).json({ error: "Player not found" });
-    }
-
+    const player = await getPlayerById(req.params.id);
+    if (!player) return res.status(404).json({ error: 'Player not found' });
     res.json(player);
-  } catch {
-    res.status(500).json({ error: "Server error" });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to get player' });
   }
 }
 
 
 
-// Add new player
-export async function addPlayer(req, res) {
-  try {
-    const players = await readPlayers();
-    const maxId = players.reduce((max, p) => Math.max(max, p.id), 0);
-    const newPlayer = { id: maxId + 1, ...req.body };
 
-    players.push(newPlayer);
-    await writePlayers(players);
+// הוסף שחקן חדש
+export async function addPlayerController(req, res) {
+  try {
+    // Check if player exists by name
+    const playerData = {
+      username: req.body.username,
+      best_time: null,
+    };
+    const newPlayer = await addPlayer(playerData);
     res.status(201).json(newPlayer);
-  } catch {
-    res.status(500).json({ error: "Failed to add player" });
+  } catch (error) {
+    console.error('Error in addPlayerController:', error)
+    res.status(500).json({ error: 'Failed to add player' });
   }
 }
 
-// Update player time
-export async function updatePlayerTime(req, res) {
+
+
+// עדכן זמן שחקן
+export async function updatePlayerTimeController(req, res) {
   try {
-    const { name } = req.params;
-    const { time } = req.body;
+    const time = Number(req.body.best_time);
+    if (isNaN(time) || time < 0) return res.status(400).json({ error: "Invalid time value" });
 
-    const players = await readPlayers();
-    const index = players.findIndex(p => p.name.toLowerCase() === name.toLowerCase());
+    const player = await getPlayerById(req.params.id);
+    if (!player) return res.status(404).json({ error: 'Player not found' });
 
-    if (index === -1) {
-      return res.status(404).json({ error: "Player not found" });
-    }
-
-    if (!players[index].lowestTime || time < players[index].lowestTime) {
-      players[index].lowestTime = time;
-      await writePlayers(players);
-      res.json({ msg: "New record!", player: players[index] });
+    if (player.best_time === null || time < player.best_time) {
+      const updatedPlayer = await updatePlayerTime(req.params.id, time);
+      return res.json({ msg: "New record!", player: updatedPlayer });
     } else {
-      res.json({ msg: "Time not improved", player: players[index] });
+      return res.json({ msg: "No improvement", player });
     }
-  } catch {
-    res.status(500).json({ error: "Failed to update player" });
+  } catch (error) {
+    console.error('Error updating player time:', error);
+    res.status(500).json({ error: 'Failed to update player time' });
+  }
+}
+
+
+
+
+// מחק שחקן
+export async function deletePlayerController(req, res) {
+  try {
+    const deleted = await deletePlayer(req.params.id);
+    if (!deleted) return res.status(404).json({ error: 'Player not found' });
+    res.json({ msg: 'Player deleted' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete player' });
   }
 }

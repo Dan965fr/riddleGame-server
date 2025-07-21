@@ -1,13 +1,44 @@
-import fs from "fs/promises";
+import { connectToRiddleDB } from "../db/connectMongo.js";
+import { ObjectId } from "mongodb";
 
-const PATH = "./lib/riddles.txt";
 
-export async function readData() {
-    const raw = await fs.readFile(PATH, "utf-8");
-    return JSON.parse(raw);
+
+export async function getAllRiddles(){
+    const db = await connectToRiddleDB();
+    return db.collection("riddles").find().toArray();
+
 }
 
-export async function writeData(data) {
-    const str = JSON.stringify(data, null, 2);
-    await fs.writeFile(PATH, str, "utf-8");
+
+export async function getRiddleById(id){
+    const db = await connectToRiddleDB();
+    return db.collection("riddles").findOne({_id: new ObjectId(id)});
+}
+
+
+
+export async function addRiddle(riddleData){
+    const db = await connectToRiddleDB();
+    const result = await db.collection("riddles").insertOne(riddleData);
+    return db.collection("riddles").findOne({ _id: result.insertedId });
+  
+}
+
+
+
+export async function updateRiddle(id, updatedData) {
+  const db = await connectToRiddleDB();
+  await db.collection("riddles").updateOne(
+    { _id: new ObjectId(id) },
+    { $set: updatedData }
+  );
+  return getRiddleById(id);
+}
+
+
+
+export async function deleteRiddle(id) {
+  const db = await connectToRiddleDB();
+  const result = await db.collection("riddles").deleteOne({ _id: new ObjectId(id) });
+  return result.deletedCount > 0;
 }
