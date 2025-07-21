@@ -3,9 +3,7 @@ import { config } from "dotenv";
 config()
 
 
-const client = new MongoClient(process.env.DB_CONNECTION,{
-    tlsAllowInvalidCertificates: true
-})
+const client = new MongoClient(process.env.DB_CONNECTION)
 
 /**
  * @type {Db | null}
@@ -30,4 +28,4 @@ export async function connectToRiddleDB() {
     return db;
 }
 
-// connectToRiddleDB()
+connectToRiddleDB()

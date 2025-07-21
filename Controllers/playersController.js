@@ -39,9 +39,15 @@ export async function getPlayerByIdController(req, res) {
 // הוסף שחקן חדש
 export async function addPlayerController(req, res) {
   try {
-    const newPlayer = await addPlayer(req.body);
+    // Check if player exists by name
+    const playerData = {
+      username: req.body.username,
+      best_time: null,
+    };
+    const newPlayer = await addPlayer(playerData);
     res.status(201).json(newPlayer);
   } catch (error) {
+    console.error('Error in addPlayerController:', error)
     res.status(500).json({ error: 'Failed to add player' });
   }
 }
@@ -51,14 +57,20 @@ export async function addPlayerController(req, res) {
 // עדכן זמן שחקן
 export async function updatePlayerTimeController(req, res) {
   try {
-    // req.body.lowestTime צריך להיות מספר
-    const time = Number(req.body.lowestTime);
+    const time = Number(req.body.best_time);
     if (isNaN(time) || time < 0) return res.status(400).json({ error: "Invalid time value" });
 
-    const updated = await updatePlayerTime(req.params.id, time);
-    if (!updated) return res.status(404).json({ error: 'Player not found' });
-    res.json(updated);
+    const player = await getPlayerById(req.params.id);
+    if (!player) return res.status(404).json({ error: 'Player not found' });
+
+    if (player.best_time === null || time < player.best_time) {
+      const updatedPlayer = await updatePlayerTime(req.params.id, time);
+      return res.json({ msg: "New record!", player: updatedPlayer });
+    } else {
+      return res.json({ msg: "No improvement", player });
+    }
   } catch (error) {
+    console.error('Error updating player time:', error);
     res.status(500).json({ error: 'Failed to update player time' });
   }
 }

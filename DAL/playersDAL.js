@@ -20,15 +20,20 @@ export async function getPlayerById(id) {
 }
 
 
+// קבל שחקן לפי name
+export async function getPlayerByname(name) {
+  const { data, error } = await supabase.from('players').select('*').ilike('username', name).single();
+  if (error) return null;
+  return data;
+}
+
+
 
 
 // הוסף שחקן חדש
 export async function addPlayer(player) {
   const { data, error } = await supabase.from('players').insert([player]).select().single();
-  if (error){
-    console.error("Supabase addPlayer error:", error);
-    throw error;
-  };
+  if (error) throw error; 
   return data;
 }
 
@@ -41,10 +46,10 @@ export async function updatePlayerTime(id, time) {
   const player = await getPlayerById(id);
   if (!player) throw new Error("Player not found");
 
-  if (player.lowestTime === null || time < player.lowestTime) {
+  if (player.best_time === 0 || time < player.best_time) {
     const { data, error } = await supabase
       .from('players')
-      .update({ lowestTime: time })
+      .update({ best_time: time })
       .eq('id', id)
       .select()
       .single();

@@ -20,8 +20,8 @@ export async function getRiddleById(id){
 export async function addRiddle(riddleData){
     const db = await connectToRiddleDB();
     const result = await db.collection("riddles").insertOne(riddleData);
-    const insertedRiddle = await db.collection("riddles").findOne({ _id: result.insertedId });
-    return insertedRiddle;
+    return db.collection("riddles").findOne({ _id: result.insertedId });
+  
 }
 
 

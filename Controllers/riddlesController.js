@@ -3,7 +3,7 @@ import { getAllRiddles,getRiddleById,addRiddle,updateRiddle,deleteRiddle } from 
 
 
 // קבל את כל החידות
-export async function getAllRiddlesController(req, res) {
+export async function getAllRiddlesController(req,res) {
   try {
     const riddles = await getAllRiddles();
     res.json(riddles);
