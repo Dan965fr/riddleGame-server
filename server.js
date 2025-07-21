@@ -17,6 +17,7 @@ app.use(logger);
 app.use('/riddles',riddleRoutes);
 app.use('/players', playersRoutes);
 
+
 // for bad routs
 app.use((req,res)=>{
     res.status(404).json({error:`rout not found`})

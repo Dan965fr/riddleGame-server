@@ -1,7 +1,11 @@
 import { MongoClient,Db} from "mongodb";
+import { config } from "dotenv";
+config()
 
 
-const client = new MongoClient(process.env.DB_CONNECTION);
+const client = new MongoClient(process.env.DB_CONNECTION,{
+    tlsAllowInvalidCertificates: true
+})
 
 /**
  * @type {Db | null}
@@ -13,11 +17,17 @@ let db = null;
  */
 export async function connectToRiddleDB() {
     if (!db) {
-        await client.connect();
-        db = client.db("riddles_db");
-        console.log("Connected to MongoDB");
+        try {
+            await client.connect();
+
+            db = client.db("riddles_db");
+            console.log("Connected to MongoDB");
+        } catch (err) {
+            console.error("Error connecting to MongoDB:", err.message);
+            throw err;
+        }
     }
     return db;
 }
 
-connect();
+// connectToRiddleDB()
