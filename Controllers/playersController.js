@@ -64,8 +64,8 @@ export async function updatePlayerTimeController(req, res) {
     if (!player) return res.status(404).json({ error: 'Player not found' });
 
     if (player.best_time === null || time < player.best_time) {
-      const updatedPlayer = await updatePlayerTime(req.params.id, time);
-      return res.json({ msg: "New record!", player: updatedPlayer });
+      const updateResult = await updatePlayerTime(req.params.id, time);
+      return res.json(updateResult);
     } else {
       return res.json({ msg: "No improvement", player });
     }
