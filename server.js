@@ -1,6 +1,7 @@
 import express from 'express';
 import riddleRoutes from './routs/riddlesRoutes.js'
 import playersRoutes from "./routs/playersRoutes.js";
+import userRoutes from './routs/userRoutes.js';
 import {logger} from './middleware/logger.js'
 import { config } from 'dotenv';
 config();
@@ -16,6 +17,7 @@ app.use(logger);
 
 app.use('/riddles',riddleRoutes);
 app.use('/players', playersRoutes);
+app.use('/api/users',userRoutes)
 
 
 // for bad routs

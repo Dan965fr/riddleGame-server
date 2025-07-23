@@ -46,7 +46,7 @@ export async function updatePlayerTime(id, time) {
   const player = await getPlayerById(id);
   if (!player) throw new Error("Player not found");
 
-  if (player.best_time === 0 || time < player.best_time) {
+  if (player.best_time === null || time < player.best_time) {
     const { data, error } = await supabase
       .from('players')
       .update({ best_time: time })
