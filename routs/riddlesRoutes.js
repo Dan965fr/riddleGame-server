@@ -1,16 +1,17 @@
 import express from 'express';
-import {getAllRiddlesController,getRiddleByIdController,addRiddleController,updateRiddleController,deleteRiddleController} from '../Controllers/riddlesController.js'
+import { getAllRiddlesController, getRiddleByIdController, addRiddleController, updateRiddleController, deleteRiddleController } from '../Controllers/riddlesController.js'
 import { verifyToken } from '../middleware/verifyT.js';
 import { verifyAdmin } from '../middleware/verifyA.js';
+import { verifyUserOrAdmin } from '../middleware/verifyU.js';
 
 const router = express.Router();
 
 
-router.get('/',getAllRiddlesController);
-router.get('/:id',getRiddleByIdController);
-router.post('/',verifyToken,addRiddleController);
-router.put('/:id',verifyAdmin,verifyToken,updateRiddleController);
-router.delete('/:id',verifyAdmin,verifyToken,deleteRiddleController);
+router.get('/', getAllRiddlesController);
+router.get('/:id', getRiddleByIdController);
+router.post('/', verifyToken, verifyUserOrAdmin, addRiddleController);
+router.put('/:id', verifyToken, verifyAdmin, updateRiddleController);
+router.delete('/:id', verifyToken, verifyAdmin, deleteRiddleController);
 
 
 export default router;
