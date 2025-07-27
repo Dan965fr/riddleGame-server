@@ -1,6 +1,9 @@
 import express from 'express';
 import riddleRoutes from './routs/riddlesRoutes.js'
 import playersRoutes from "./routs/playersRoutes.js";
+import userRoutes from './routs/userRoutes.js';
+import loginRoutes from './routs/loginRoutes.js';
+// import cookieParser from 'cookie-parser';
 import {logger} from './middleware/logger.js'
 import { config } from 'dotenv';
 config();
@@ -11,11 +14,15 @@ const app = express();
 const PORT = 3007;
 
 app.use(express.json());
+// app.use(cookieParser())
 app.use(logger);
 
 
 app.use('/riddles',riddleRoutes);
 app.use('/players', playersRoutes);
+app.use('/api/users',userRoutes);
+app.use('/api',loginRoutes);
+
 
 
 // for bad routs
