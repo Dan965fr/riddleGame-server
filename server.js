@@ -22,8 +22,8 @@ app.use(logger);
 app.use('/riddles',riddleRoutes);
 app.use('/players', playersRoutes);
 app.use('/api/users',userRoutes);
-app.use('/login',loginRoutes);
-app.use('api/guest',guestRoutes)
+app.use('/api',loginRoutes);
+app.use('/api/guest',guestRoutes)
 
 
 // for bad routs
